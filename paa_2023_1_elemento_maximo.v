@@ -134,7 +134,7 @@ Proof.
       * simpl elt_max_aux. destruct (x <? a) eqn:Hlt.
         ** apply elt_max_aux_in.
         ** apply in_cons. apply IHl. assumption.
-Qed.        
+Qed.
 
 (**
 
@@ -151,4 +151,13 @@ Definition elt_max (l: list nat) :=
   
 Theorem elt_max_correto: forall l k, elt_max l = Some k -> k >=* l /\ In k l.
 Proof.
-Admitted.
+  induction l.
+  - intros k H. (* inversion H. **)
+    + subst. split.
+      * unfold ge_all in *. intros y' H'. inversion H'.
+      * inversion H.
+  - intros k H. inversion H.
+    + subst. split.
+      * apply elt_max_aux_correct_1.
+      * apply elt_max_aux_in.
+Qed.
