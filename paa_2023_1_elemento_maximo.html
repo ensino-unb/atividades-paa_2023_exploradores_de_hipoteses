@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title>paa_2023_1_elemento_maximo</title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<div class="code">
+</div>
+
+<div class="doc">
+<a name="lab1"></a><h1 class="section">Algoritmo que retorna o maior elemento de uma lista de naturais.</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="var">Arith</span> <span class="id" title="var">List</span> <span class="id" title="var">Lia</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Fixpoint</span> <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">max</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="var">l</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <span class="id" title="var">nil</span> =&gt; <span class="id" title="var">max</span><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span>::<span class="id" title="var">tl</span> =&gt; <span class="id" title="keyword">if</span> <span class="id" title="var">max</span> &lt;? <span class="id" title="var">h</span> <span class="id" title="keyword">then</span> <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">tl</span> <span class="id" title="var">h</span> <span class="id" title="keyword">else</span> <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">tl</span> <span class="id" title="var">max</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Eval</span> <span class="id" title="tactic">compute</span> <span class="id" title="keyword">in</span> (<span class="id" title="var">elt_max_aux</span> (1::2::3::<span class="id" title="var">nil</span>) 0).<br/>
+<span class="id" title="keyword">Eval</span> <span class="id" title="tactic">compute</span> <span class="id" title="keyword">in</span> (<span class="id" title="var">elt_max_aux</span> (1::2::3::<span class="id" title="var">nil</span>) 7).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">ge_all</span> <span class="id" title="var">x</span> <span class="id" title="var">l</span> := <span class="id" title="keyword">forall</span> <span class="id" title="var">y</span>, <span class="id" title="var">In</span> <span class="id" title="var">y</span> <span class="id" title="var">l</span> -&gt; <span class="id" title="var">y</span> &lt;= <span class="id" title="var">x</span>.<br/>
+<span class="id" title="keyword">Infix</span> &quot;&gt;=*" := <span class="id" title="var">ge_all</span> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 70, <span class="id" title="keyword">no</span> <span class="id" title="keyword">associativity</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">le_all</span> <span class="id" title="var">x</span> <span class="id" title="var">l</span> := <span class="id" title="keyword">forall</span> <span class="id" title="var">y</span>, <span class="id" title="var">In</span> <span class="id" title="var">y</span> <span class="id" title="var">l</span> -&gt; <span class="id" title="var">x</span> &lt;= <span class="id" title="var">y</span>.<br/>
+<span class="id" title="keyword">Infix</span> &quot;&lt;=*" := <span class="id" title="var">le_all</span> (<span class="id" title="tactic">at</span> <span class="id" title="keyword">level</span> 70, <span class="id" title="keyword">no</span> <span class="id" title="keyword">associativity</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_large</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span>, <span class="id" title="var">a</span> &lt;= <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">a</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="var">lia</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">a'</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">a'</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.le_trans</span> <span class="id" title="keyword">with</span> <span class="id" title="var">a</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_lt</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.lt_le_incl</span>; <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_le</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span> <span class="id" title="var">a'</span>, <span class="id" title="var">a</span> &lt;= <span class="id" title="var">a'</span> -&gt;  <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span> &lt;= <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">a'</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">a</span> <span class="id" title="var">a'</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">a'</span> <span class="id" title="var">a''</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">a'</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">H1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">destruct</span> (<span class="id" title="var">a''</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">H2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="var">lia</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_ge</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">destruct</span> (<span class="id" title="var">a''</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">H2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_lt</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_ge</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H1</span>. <span class="id" title="var">lia</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_correct_1</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span>, <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span> &gt;=* <span class="id" title="var">a</span>::<span class="id" title="var">l</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">a</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge_all</span>. <span class="id" title="tactic">intros</span> <span class="id" title="var">y</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span>. <span class="id" title="var">lia</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">inversion</span> <span class="id" title="var">H0</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">a'</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">a'</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge_all</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">intros</span> <span class="id" title="var">y</span> <span class="id" title="var">H'</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H'</span>; <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.le_trans</span> <span class="id" title="keyword">with</span> <span class="id" title="var">a</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_lt</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.lt_le_incl</span>; <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_large</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>; <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge_all</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">intros</span> <span class="id" title="var">y</span> <span class="id" title="var">H'</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H'</span>; <span class="id" title="tactic">subst</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_large</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.le_trans</span> <span class="id" title="keyword">with</span> (<span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">a</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>; <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_le</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_ge</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_head</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">d</span>, <span class="id" title="var">In</span> (<span class="id" title="var">elt_max_aux</span> (<span class="id" title="var">d</span>::<span class="id" title="var">l</span>) <span class="id" title="var">d</span>) (<span class="id" title="var">d</span>::<span class="id" title="var">l</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">d</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">d</span> &lt;? <span class="id" title="var">d</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">left</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">left</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">d</span>. <span class="id" title="tactic">simpl</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">assert</span> (<span class="id" title="var">H</span> := <span class="id" title="var">IHl</span>). <span class="id" title="tactic">specialize</span> (<span class="id" title="var">H</span> <span class="id" title="var">d</span>). <span class="id" title="tactic">destruct</span> (<span class="id" title="var">d</span> &lt;? <span class="id" title="var">d</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">Hd</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Nat.ltb_irrefl</span> <span class="id" title="keyword">in</span> <span class="id" title="var">Hd</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">Hd</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">destruct</span> (<span class="id" title="var">d</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">Ha</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHl</span> <span class="id" title="var">a</span>). <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Nat.ltb_irrefl</span> <span class="id" title="keyword">in</span> <span class="id" title="var">IHl</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">IHl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** <span class="id" title="tactic">right</span>. <span class="id" title="tactic">left</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** <span class="id" title="tactic">right</span>. <span class="id" title="tactic">right</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">left</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">destruct</span> (<span class="id" title="var">d</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">Ha</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHl</span> <span class="id" title="var">a</span>). <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Nat.ltb_irrefl</span> <span class="id" title="keyword">in</span> <span class="id" title="var">IHl</span>. <span class="id" title="tactic">destruct</span> <span class="id" title="var">IHl</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** <span class="id" title="tactic">right</span>. <span class="id" title="tactic">left</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** <span class="id" title="tactic">right</span>. <span class="id" title="tactic">right</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">right</span>. <span class="id" title="tactic">right</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_correct_2</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">d</span>, <span class="id" title="var">elt_max_aux</span> (<span class="id" title="var">d</span>::<span class="id" title="var">l</span>) <span class="id" title="var">d</span> &gt;=* <span class="id" title="var">d</span>::<span class="id" title="var">l</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l</span> <span class="id" title="var">d</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Nat.ltb_irrefl</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_correct_1</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">in_swap</span>: <span class="id" title="keyword">forall</span> (<span class="id" title="var">l</span>: <span class="id" title="var">list</span> <span class="id" title="var">nat</span>) <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">In</span> <span class="id" title="var">z</span> (<span class="id" title="var">x</span>::<span class="id" title="var">y</span>::<span class="id" title="var">l</span>) -&gt; <span class="id" title="var">In</span> <span class="id" title="var">z</span> (<span class="id" title="var">y</span>::<span class="id" title="var">x</span>::<span class="id" title="var">l</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">simpl</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">rewrite</span> &lt;- <span class="id" title="var">or_assoc</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">left</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">or_comm</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">right</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_in</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span>, <span class="id" title="var">In</span> (<span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span>) (<span class="id" title="var">x</span>::<span class="id" title="var">l</span>).<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">x</span>. <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">left</span>; <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intro</span> <span class="id" title="var">x</span>. <span class="id" title="tactic">simpl</span> <span class="id" title="var">elt_max_aux</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">x</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>: <span class="id" title="var">Hlt</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHl</span> <span class="id" title="var">a</span>). <span class="id" title="tactic">apply</span> <span class="id" title="var">in_cons</span>; <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">specialize</span> (<span class="id" title="var">IHl</span> <span class="id" title="var">x</span>). <span class="id" title="tactic">apply</span> <span class="id" title="var">in_swap</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">in_cons</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">ge_ge_all</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> &gt;= <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> &gt;=* <span class="id" title="var">l</span> -&gt; <span class="id" title="var">x</span> &gt;=* <span class="id" title="var">l</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge_all</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">intros</span> <span class="id" title="var">y'</span> <span class="id" title="var">H'</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H'</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge_all</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">intros</span> <span class="id" title="var">y'</span> <span class="id" title="var">H'</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">H2</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H'</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge</span> <span class="id" title="keyword">in</span> <span class="id" title="var">H1</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.le_trans</span> <span class="id" title="keyword">with</span> <span class="id" title="var">y</span>; <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">elt_max_aux_correto</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span>, <span class="id" title="var">In</span> <span class="id" title="var">x</span> <span class="id" title="var">l</span> -&gt;  <span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span> &gt;=* <span class="id" title="var">l</span> /\ <span class="id" title="var">In</span> (<span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span>) <span class="id" title="var">l</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">x</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_correct_2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_head</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">clear</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">x</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">Hlt</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_correct_1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">replace</span> (<span class="id" title="var">elt_max_aux</span> <span class="id" title="var">l</span> <span class="id" title="var">x</span>) <span class="id" title="keyword">with</span> (<span class="id" title="var">elt_max_aux</span> (<span class="id" title="var">a</span>::<span class="id" title="var">l</span>) <span class="id" title="var">x</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** <span class="id" title="tactic">apply</span> <span class="id" title="var">ge_ge_all</span> <span class="id" title="keyword">with</span> (<span class="id" title="var">elt_max_aux</span> (<span class="id" title="var">a</span>::<span class="id" title="var">l</span>) <span class="id" title="var">a</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**** <span class="id" title="tactic">apply</span> <span class="id" title="var">Nat.ltb_ge</span> <span class="id" title="keyword">in</span> <span class="id" title="var">Hlt</span>. <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_le</span>. <span class="id" title="tactic">assumption</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**** <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_correct_2</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*** <span class="id" title="tactic">simpl</span>. <span class="id" title="tactic">rewrite</span> <span class="id" title="var">Hlt</span>. <span class="id" title="tactic">reflexivity</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">simpl</span> <span class="id" title="var">elt_max_aux</span>. <span class="id" title="tactic">destruct</span> (<span class="id" title="var">x</span> &lt;? <span class="id" title="var">a</span>) <span class="id" title="var">eqn</span>:<span class="id" title="var">Hlt</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_in</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;** <span class="id" title="tactic">apply</span> <span class="id" title="var">in_cons</span>. <span class="id" title="tactic">apply</span> <span class="id" title="var">IHl</span>. <span class="id" title="tactic">assumption</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+
+<div class="paragraph"> </div>
+
+Agora podemos definir a função principal:
+
+<div class="paragraph"> </div>
+
+ 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">elt_max</span> (<span class="id" title="var">l</span>: <span class="id" title="var">list</span> <span class="id" title="var">nat</span>) :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="var">l</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;| <span class="id" title="var">nil</span> =&gt; <span class="id" title="var">None</span><br/>
+&nbsp;&nbsp;| <span class="id" title="var">h</span>::<span class="id" title="var">tl</span> =&gt; <span class="id" title="var">Some</span> (<span class="id" title="var">elt_max_aux</span> <span class="id" title="var">tl</span> <span class="id" title="var">h</span>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">elt_max_correto</span>: <span class="id" title="keyword">forall</span> <span class="id" title="var">l</span> <span class="id" title="var">k</span>, <span class="id" title="var">elt_max</span> <span class="id" title="var">l</span> = <span class="id" title="var">Some</span> <span class="id" title="var">k</span> -&gt; <span class="id" title="var">k</span> &gt;=* <span class="id" title="var">l</span> /\ <span class="id" title="var">In</span> <span class="id" title="var">k</span> <span class="id" title="var">l</span>.<br/>
+<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;<span class="id" title="tactic">induction</span> <span class="id" title="var">l</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">k</span> <span class="id" title="var">H</span>. &nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">unfold</span> <span class="id" title="var">ge_all</span> <span class="id" title="keyword">in</span> *. <span class="id" title="tactic">intros</span> <span class="id" title="var">y'</span> <span class="id" title="var">H'</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H'</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">k</span> <span class="id" title="var">H</span>. <span class="id" title="tactic">inversion</span> <span class="id" title="var">H</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;+ <span class="id" title="tactic">subst</span>. <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_correct_1</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* <span class="id" title="tactic">apply</span> <span class="id" title="var">elt_max_aux_in</span>.<br/>
+<span class="id" title="keyword">Qed</span>.<br/>
+</div>
+</div>
+
+<div id="footer">
+<hr/><a href="index.html">Index</a><hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
