@@ -5,7 +5,7 @@ Esse repositorio tem o intuito de guardar as 3 atividades que compoem a nota do 
 ```
 1. Elemento Maximo
 2. Merge Sort
-3.
+3. ?
 ```
 Aqui coloco a nota tirada em cada um deles, no formato `nota tirada/nota total -> (nota tirada/nota total)*10`:
 ```
